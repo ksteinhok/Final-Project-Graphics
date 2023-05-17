@@ -3,13 +3,13 @@ import { RenderPass } from "https://unpkg.com/three@0.120.0/examples/jsm/postpro
 import { UnrealBloomPass } from "https://unpkg.com/three@0.120.0/examples/jsm/postprocessing/UnrealBloomPass.js";
 import { OBJLoader } from "https://unpkg.com/three@0.120.0/examples/jsm/loaders/OBJLoader";
 import { OrbitControls } from "https://unpkg.com/three@0.120.0/examples/jsm/controls/OrbitControls";
-var cardtemplate = "https://raw.githubusercontent.com/ksteinhok/Final-Project-Graphics/main/assets/frontsideGREEN2.png";
-var cardtemplateback = "https://raw.githubusercontent.com/pizza3/asset/master/cardtemplateback4.png";
+var cardtemplate = "https://cdn.discordapp.com/attachments/781376328644689920/1107910733116739666/frontsideGREENN.png";
+var cardtemplateback = "https://raw.githubusercontent.com/ksteinhok/Final-Project-Graphics/main/assets/cardbackGREEN.png";
 var flower = "https://cdn.discordapp.com/attachments/781376328644689920/1107581636444438578/cardback2.png";
 var noise2 = "https://raw.githubusercontent.com/pizza3/asset/master/noise2.png";
 var color11 = "https://raw.githubusercontent.com/pizza3/asset/master/color11.png";
 var backtexture = "https://raw.githubusercontent.com/pizza3/asset/master/color3.jpg";
-var skullmodel = "https://raw.githubusercontent.com/ksteinhok/Final-Project-Graphics/main/assets/butterfly2.obj";
+var Butterflymodel = "https://raw.githubusercontent.com/ksteinhok/Final-Project-Graphics/main/assets/butterfly2.obj";
 var voronoi = "https://raw.githubusercontent.com/pizza3/asset/master/rgbnoise2.png";
 
 
@@ -73,7 +73,7 @@ const vert = `
 
 const fragPlane = `
 	varying vec2 vUv;
-  uniform sampler2D skullrender;
+  uniform sampler2D bflyrender;
   uniform sampler2D cardtemplate;
   uniform sampler2D backtexture;
   uniform sampler2D noiseTex;
@@ -91,7 +91,7 @@ const fragPlane = `
   void main() {
     vec2 uv = gl_FragCoord.xy/resolution.xy ;
     vec4 temptex = texture2D( cardtemplate, vUv);
-    vec4 skulltex = texture2D( skullrender, uv - 0.5 );
+    vec4 skulltex = texture2D( bflyrender, uv - 0.5 );
     gl_FragColor = temptex;
     float f = Fresnel(eyeVector, vNormal);
     vec4 noisetex = texture2D( noise, mod(vUv*2.,1.));
@@ -128,7 +128,7 @@ const fragPlane = `
 
 const fragPlaneback = `
 	varying vec2 vUv;
-  uniform sampler2D skullrender;
+  uniform sampler2D bflyrender;
   uniform sampler2D cardtemplate;
   uniform sampler2D backtexture;
   uniform sampler2D noiseTex;
@@ -146,7 +146,7 @@ const fragPlaneback = `
   void main() {
     vec2 uv = gl_FragCoord.xy/resolution.xy ;
     vec4 temptex = texture2D( cardtemplate, vUv);
-    vec4 skulltex = texture2D( skullrender, vUv );
+    vec4 skulltex = texture2D( bflyrender, vUv );
     gl_FragColor = temptex;
     vec4 noisetex = texture2D( noise, mod(vUv*2.,1.));
     float f = Fresnel(eyeVector, vNormal);
@@ -360,9 +360,9 @@ function init() {
   composer.addPass(renderScene);
   composer.addPass(bloomPass);
   //
-  plane();
-  planeback();
-  loadskull();
+  plane(); //front of card render
+  planeback(); //back of card render
+  loadBfly(); //inside chroma render
   animate();
 }
 
@@ -382,7 +382,7 @@ function plane() {
         type: "t",
         value: new THREE.TextureLoader().load(noise2),
       },
-      skullrender: {
+      bflyrender: {
         type: "t",
         value: composer.readBuffer.texture,
       },
@@ -424,7 +424,7 @@ function planeback() {
         type: "t",
         value: new THREE.TextureLoader().load(noise2),
       },
-      skullrender: {
+      bflyrender: {
         type: "t",
         value: new THREE.TextureLoader().load(flower),
       },
@@ -455,7 +455,7 @@ var eye,
   skullmaterial,
   modelgroup = new THREE.Group();
 
-function loadskull() {
+function loadBfly() {
   skullmaterial = new THREE.ShaderMaterial({
     uniforms: {
       time: {
@@ -477,18 +477,18 @@ function loadskull() {
     // depthWrite: false,
   });
 
-  var spheregeo = new THREE.SphereGeometry(.5, 32, 32);
+  var spheregeo = new THREE.SphereGeometry(.25, 32, 32);
   basicmat = new THREE.MeshBasicMaterial();
   basicmat.color.setRGB(...options.color2);
   eye = new THREE.Mesh(spheregeo, basicmat);
   eye2 = new THREE.Mesh(spheregeo, basicmat);
-  eye.position.set(-2.2, -2.2, -6.6);
-  eye2.position.set(2.2, -2.2, -6.6);
+  eye.position.set(-.5, -2.2, -5.9);
+  eye2.position.set(.4, -2.2, -5.9);
   modelgroup = new THREE.Object3D();
   modelgroup.add(eye);
   modelgroup.add(eye2);
   var objloader = new OBJLoader();
-  objloader.load(skullmodel, function (object) {
+  objloader.load(Butterflymodel, function (object) {
     var mesh2 = object.clone();
     mesh2.position.set(0, 0, -10);
     mesh2.rotation.set(Math.PI, 0, Math.PI);
