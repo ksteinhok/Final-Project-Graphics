@@ -1,10 +1,16 @@
 # fool Card
 
-mock up final graphics project after original idea fell through
+final graphics project after original idea fell through
 
 for Graphics 370 w/ Dave Shreiner
 
-original ghost card @
+inspired by a piece on CodePen.io
+
+Features a floating Tarot card with a butterfly 'in' the card. the non-euclidean geometry is created with a green screen and second scene
+only visible through the front of the card. I created all the assets excluding the noise used to generate texture on the card.
+
+
+original Ghost Card:
 A Pen created on CodePen.io. Original URL: [https://codepen.io/pizza3/pen/pobevYW](https://codepen.io/pizza3/pen/pobevYW).
 
-shamelessly redone by Karsten for a final project.
+
