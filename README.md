@@ -1,6 +1,6 @@
 # fool Card
 
-final graphics project after original idea fell through
+final graphics project after I couldn't present my paralax effect in Blender
 
 for Graphics 370 w/ Dave Shreiner
 
